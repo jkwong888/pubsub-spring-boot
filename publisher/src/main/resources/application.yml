@@ -1,0 +1,8 @@
+spring:
+  cloud:
+    function: 
+      definition: sendMessageToTopic
+    stream:
+      bindings:
+        sendMessageToTopic-out-0:
+          destination: projects/jkwng-pubsub-spring-boot-a76c/topics/topic-2480

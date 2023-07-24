@@ -1,0 +1,10 @@
+spring:
+  jackson:
+    deserialization:
+      accept-single-value-as-array: true
+
+pubsub:
+  topics:
+    topic0: projects/jkwng-pubsub-spring-boot-a76c/topics/topic-2480
+    topic1: projects/jkwng-pubsub-spring-boot-a76c/topics/topic-da76
+    topic2: projects/jkwng-pubsub-spring-boot-a76c/topics/topic-f7ab

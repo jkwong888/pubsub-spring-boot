@@ -1,0 +1,22 @@
+apiVersion: skaffold/v4beta4
+kind: Config
+metadata:
+  name: topic-router
+build:
+  tagPolicy:
+    gitCommit: {}
+  artifacts:
+    - image: gcr.io/jkwng-images/topic-router
+      jib: {}
+
+manifests:
+  rawYaml:
+    - manifests/cloud-run-service.yaml
+portForward:
+  - resourceType: service
+    resourceName: topic-router
+    localPort: 9000
+deploy:
+  cloudrun:
+    projectid: jkwng-pubsub-spring-boot-a76c
+    region: us-central1

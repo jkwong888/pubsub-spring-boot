@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pom-xml-image
+  labels:
+    app: pom-xml-image
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+  clusterIP: None
+  selector:
+    app: pom-xml-image
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pom-xml-image
+  labels:
+    app: pom-xml-image
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pom-xml-image
+  template:
+    metadata:
+      labels:
+        app: pom-xml-image
+    spec:
+      containers:
+      - name: pom-xml-image
+        image: pom-xml-image

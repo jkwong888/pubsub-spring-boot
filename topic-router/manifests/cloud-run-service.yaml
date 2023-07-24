@@ -1,0 +1,10 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: topic-router # this service will be created in Cloud Run via Skaffold
+spec:
+  template:
+    spec:
+      serviceAccountName: topic-router@jkwng-pubsub-spring-boot-a76c.iam.gserviceaccount.com
+      containers:
+      - image: gcr.io/jkwng-images/topic-router
