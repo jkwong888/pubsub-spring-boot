@@ -1,0 +1,24 @@
+spring:
+  cloud:
+    function:
+      definition: receiveMessageFromTopic
+    stream:
+      function:
+        bindings:
+          receiveMessageFromTopic-in-0: input
+      gcp:
+        pubsub:
+          bindings:
+            events:
+              consumer:
+                autoCreateResources: false
+            input:
+              consumer:
+                subscriptionName: projects/jkwng-sub-a76c/subscriptions/sub-2480-ad0b 
+                autoCreateResources: false
+                ack-mode: MANUAL
+      bindings:
+        input:
+          destination: projects/jkwng-pubsub-spring-boot-a76c/topics/topic-2480
+
+

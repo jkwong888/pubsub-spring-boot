@@ -1,0 +1,17 @@
+apiVersion: skaffold/v4beta4
+kind: Config
+metadata:
+  name: consumer
+build:
+  platforms: ["linux/amd64"]
+  tagPolicy:
+    gitCommit: {}
+  artifacts:
+    - image: gcr.io/jkwng-images/topic-consumer
+      jib: {}
+manifests:
+  kustomize:
+    paths:
+    - manifests/base
+deploy:
+  kubectl: {}

@@ -14,7 +14,7 @@
 	<groupId>com.example</groupId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<artifactId>topic-router</artifactId>
+	<artifactId>consumer</artifactId>
 	<name>Spring Framework on Google Cloud Code Sample - Pub/Sub</name>
 
   <properties>

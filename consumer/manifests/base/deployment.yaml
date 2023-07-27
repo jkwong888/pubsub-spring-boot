@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: topic-consumer
+  labels:
+    app: topic-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: topic-consumer
+  template:
+    metadata:
+      labels:
+        app: topic-consumer
+    spec:
+      containers:
+      - name: topic-consumer
+        image: gcr.io/jkwng-images/topic-consumer
+        ports:
+        - containerPort: 8080

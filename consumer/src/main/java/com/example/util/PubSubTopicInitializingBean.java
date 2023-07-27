@@ -30,14 +30,13 @@ public class PubSubTopicInitializingBean implements InitializingBean {
         topicAdminClient = TopicAdminClient.create();
     }
 
-
     @Override
     public void afterPropertiesSet() throws Exception {
         // validate the topics exist and we can publish to them
         log.info(ToStringBuilder.reflectionToString(bindingServiceProperties));
-
+        /* 
         if (bindingServiceProperties.getBinders() == null || bindingServiceProperties.getBindings().isEmpty()) {
-            log.info("No Topics configured ...");
+            log.info("No Subscriptions configured ...");
             return;
         }
 
@@ -46,8 +45,8 @@ public class PubSubTopicInitializingBean implements InitializingBean {
             final TestIamPermissionsRequest testReq = 
                 TestIamPermissionsRequest.newBuilder()
                     .setResource(topic.getValue().getDestination())
-                    .addPermissions("pubsub.topics.publish")
-                    .addPermissions("pubsub.topics.get")
+                    .addPermissions("pubsub.subscriptions.consume")
+                    .addPermissions("pubsub.subscriptions.get")
                     .build();
 
             final TestIamPermissionsResponse resp = topicAdminClient.testIamPermissions(testReq);
@@ -56,10 +55,11 @@ public class PubSubTopicInitializingBean implements InitializingBean {
                 throw new Exception("No permission to publish to topic " + topic);
             }
 
-            log.info("Publishing to " + topic.getValue() + " as " + topic.getKey() + ": OK (" + resp.getPermissionsList() + ")");
+            log.info("Subscribing to " + topic.getValue() + " as " + topic.getKey() + ": OK (" + resp.getPermissionsList() + ")");
 
 
         }
+        */
 
 
     }

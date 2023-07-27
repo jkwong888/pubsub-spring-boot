@@ -29,10 +29,10 @@ import com.google.cloud.spring.pubsub.integration.outbound.PubSubMessageHandler;
 /** Pub/Sub sample application. */
 @SpringBootApplication
 @ConfigurationPropertiesScan("com.example.config")
-public class TopicRouterApplication {
+public class ConsumerApplication {
 
 
   public static void main(String[] args) {
-    SpringApplication.run(TopicRouterApplication.class, args);
+    SpringApplication.run(ConsumerApplication.class, args);
   }
 }

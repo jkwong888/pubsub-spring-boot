@@ -1,0 +1,21 @@
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: keda-trigger-auth-gcp-credentials
+spec:
+  podIdentity:
+    provider: gcp
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: pubsub-scaledobject
+spec:
+  scaleTargetRef:
+    name: topic-consumer
+  triggers:
+  - type: gcp-pubsub
+    authenticationRef:
+      name: keda-trigger-auth-gcp-credentials
+    metadata:
+      subscriptionName: projects/jkwng-sub-a76c/subscriptions/sub-2480-ad0b  # Required

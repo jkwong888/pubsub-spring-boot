@@ -8,6 +8,8 @@ build:
   artifacts:
     - image: gcr.io/jkwng-images/topic-router
       jib: {}
+  local:
+    push: true
 
 manifests:
   rawYaml:

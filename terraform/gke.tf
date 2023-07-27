@@ -7,7 +7,7 @@ locals {
 } 
 
 resource "google_service_account" "gke_sa" {
-  project       = module.service_project.project_id
+  project       = module.subscriber_project.project_id
   account_id    = format("%s-sa", var.gke_cluster.name)
   display_name  = format("%s cluster service account", var.gke_cluster.name)
 }
@@ -15,19 +15,19 @@ resource "google_service_account" "gke_sa" {
 resource "google_project_iam_member" "gke_sa_role" {
   count     = length(local.gke_sa_roles)
 
-  project   = module.service_project.project_id
+  project   = module.subscriber_project.project_id
   role      = local.gke_sa_roles[count.index]
   member    = "serviceAccount:${google_service_account.gke_sa.email}"
 }
 
 resource "google_project_iam_member" "gke_host_service_agent_user" {
   depends_on = [
-    module.service_project.enabled_apis,
+    module.subscriber_project.enabled_apis,
   ]
 
   project     = data.google_project.host_project.project_id
   role        = "roles/container.hostServiceAgentUser"
-  member      = format("serviceAccount:service-%d@container-engine-robot.iam.gserviceaccount.com", module.service_project.number)
+  member      = format("serviceAccount:service-%d@container-engine-robot.iam.gserviceaccount.com", module.subscriber_project.number)
 }
 
 resource "google_container_cluster" "primary" {
@@ -40,9 +40,9 @@ resource "google_container_cluster" "primary" {
   }
 
   depends_on = [
-    module.service_project.enabled_apis,
-    module.service_project.subnet_users,
-    module.service_project.hostServiceAgentUser,
+    module.subscriber_project.enabled_apis,
+    module.subscriber_project.subnet_users,
+    module.subscriber_project.hostServiceAgentUser,
     google_project_iam_member.gke_sa_role,
     google_project_organization_policy.shielded_vm_disable,
     google_project_organization_policy.oslogin_disable,
@@ -50,7 +50,7 @@ resource "google_container_cluster" "primary" {
 
   name     = var.gke_cluster.name
   location = var.gke_cluster.region
-  project  = module.service_project.project_id
+  project  = module.subscriber_project.project_id
 
   release_channel  {
     channel = "REGULAR"
@@ -71,18 +71,20 @@ resource "google_container_cluster" "primary" {
     }
   }
 
-  node_config {
-    service_account = google_service_account.gke_sa.email
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/cloud-platform"
-    ]
+  cluster_autoscaling {
+    auto_provisioning_defaults {
+      service_account = google_service_account.gke_sa.email
+      oauth_scopes = [
+        "https://www.googleapis.com/auth/cloud-platform"
+      ]
+    }
   }
 
   network = data.google_compute_network.shared_vpc.self_link
   subnetwork = lookup(
     zipmap(
-      module.service_project.subnets.*.name, 
-      module.service_project.subnets.*.self_link),
+      module.subscriber_project.subnets.*.name, 
+      module.subscriber_project.subnets.*.self_link),
     var.gke_cluster.subnet,
     ""
   )
